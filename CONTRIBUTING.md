@@ -24,7 +24,6 @@ cp .env.example .env     # 본인 API 키 입력 (커밋 금지)
 - `feature/pet-avatar`: 펫봇 외형 생성
 - `feature/floating-ui`: 화면 위 플로팅 UI
 - `feature/chatbot`: AI 챗봇
-- `feature/kiosk-guide`: 키오스크 안내 시나리오
 
 새 브랜치가 필요하면 항상 `develop`에서 만듭니다.
 
