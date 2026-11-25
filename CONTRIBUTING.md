@@ -8,7 +8,6 @@
 git clone https://github.com/forethinkfi/HK06_4N.git
 cd HK06_4N
 git checkout develop
-cp .env.example .env     # 본인 API 키 입력 (커밋 금지)
 ```
 
 ## 2. 브랜치 규칙

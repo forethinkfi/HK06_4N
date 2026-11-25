@@ -28,7 +28,6 @@
 git clone https://github.com/forethinkfi/HK06_4N.git
 cd HK06_4N
 git checkout develop
-cp .env.example .env   # API 키는 절대 커밋하지 않기
 ```
 
 ## 브랜치 전략 (해커톤용 간소화)
