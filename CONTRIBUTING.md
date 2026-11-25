@@ -21,7 +21,6 @@ git checkout develop
 
 기본 담당 브랜치
 - `feature/pet-avatar`: 펫봇 외형 생성
-- `feature/floating-ui`: 화면 위 플로팅 UI
 - `feature/chatbot`: AI 챗봇
 
 새 브랜치가 필요하면 항상 `develop`에서 만듭니다.
