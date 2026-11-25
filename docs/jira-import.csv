@@ -1,0 +1,41 @@
+﻿Issue Id,Parent,Issue Type,Summary,Priority,Original Estimate,Due Date,Labels,Description
+E1,,Epic,[준비] 기획 확정과 환경 세팅,High,,,prep,시작 전에 정해야 할 것 정리
+E2,,Epic,[아바타·목소리] 말하는 가족 아바타,Highest,,,avatar,브랜치 feature/pet-avatar
+E3,,Epic,[음성 대화] 듣고 답하기,Highest,,,voice,브랜치 feature/chatbot
+E4,,Epic,[길안내·택시] 시연 핵심 흐름,Highest,,,navigation,브랜치 feature/navigation
+E5,,Epic,[가족 설정] 가족이 준비하는 화면 (P1),Medium,,,family,브랜치 feature/family-setup. 안 되면 미리 설정한 값으로 시연
+E6,,Epic,"[통합·발표] 통합, 테스트, 발표 준비",High,,,release,develop -> main 최종 병합 포함
+101,E1,Task,AI 서비스 결정 (Gemini 또는 OpenAI)과 API 키 발급,Highest,0.5h,2026-11-25,prep,아바타 변환과 말뜻 이해에 쓸 서비스 하나 결정. 키는 코드에 넣지 않고 앱 입력칸에 넣음
+102,E1,Task,시연 목적지 2~3곳 선정 (같은 이름 2곳인 장소 포함)과 경로 정의,Highest,1h,2026-11-25,prep,각 경로를 한 문장 한 동작 단위로 나눔
+103,E1,Task,안내 문장 목록 확정 (약 25개),Highest,1h,2026-11-25,prep,공통 문장 + 택시 문장 13개 + 경로 문장. 한 문장에 한 동작
+104,E1,Task,목소리 복제 팀원 동의 받고 일레븐랩스로 음성 파일 제작,Highest,2h,2026-11-25,prep,assets/voice/ 에 저장. 실제 가족 목소리는 저장소에 올리지 않음
+105,E1,Task,frontend 프로젝트 뼈대와 GitHub Pages(https) 배포 설정,High,1h,2026-11-25,prep,폰에서 마이크와 카메라 권한을 쓰려면 https 필요
+106,E1,Task,카카오 택시 앱 링크 준비와 폰에서 열리는지 확인,High,0.5h,2026-11-25,prep,안 열리면 '카카오 택시를 켜 주세요' 안내로 대체
+107,E2,Story,샘플 아바타 이미지 준비,Highest,1h,2026-11-26,avatar,미리 만든 아바타. 사진 변환이 안 될 때의 대체안
+108,E2,Story,"말하는 아바타 화면 UI (영상통화 느낌, 'AI 도우미' 표시)",Highest,2h,2026-11-26,avatar,앱을 열면 아바타만 보임. 첫 인사에서 AI임을 말로 알림
+109,E2,Story,아바타 입 움직임 (Web Audio 소리 크기 연동),Highest,2h,2026-11-26,avatar,재생 중 소리 크기에 맞춰 입 모양 변경
+110,E2,Task,눈 깜빡임과 작은 움직임,Medium,1h,2026-11-26,avatar,영상통화처럼 보이게
+111,E2,Task,"음성 파일 재생 모듈 (문장 ID로 재생, 재생 끝 이벤트)",Highest,1h,2026-11-26,avatar,도우미가 말하는 동안 듣지 않는 로직과 연결
+112,E3,Story,음성 인식 (Web Speech API)과 큰 말하기 버튼,Highest,2h,2026-11-26,voice,앱을 열면 바로 듣기. 브라우저가 막을 때를 위해 버튼
+113,E3,Task,짧은 응답 해석 (응/아니/알겠어/다시/잠깐),Highest,1.5h,2026-11-26,voice,정해진 단어 목록으로만 알아들음
+114,E3,Task,도우미가 말하는 동안 듣지 않고 끝난 뒤 듣기,High,1h,2026-11-26,voice,자기 목소리를 다시 듣는 오류 방지
+115,E3,Task,실패 대비 선택 버튼과 '다시 알려줘' 버튼,Highest,1h,2026-11-26,voice,음성 인식이 불안정하면 버튼만으로 시연 가능해야 함
+116,E3,Story,AI 말뜻 이해 (아픈데 병원 가야지 -> 목적지 요청) (P1),Medium,2h,2026-11-26,voice,실패하면 정해진 단어로 대체
+117,E4,Story,대화 흐름 상태 관리 (목적지 -> 확인 -> 이동수단 -> 안내 -> 도착),Highest,2h,2026-11-26,navigation,모든 안내의 뼈대. 가장 먼저 만들기
+118,E4,Story,같은 이름 장소 확인 (가까운 곳부터 지역과 함께 '맞아요?'),Highest,1.5h,2026-11-26,navigation,확인 없이 다음으로 넘어가지 않음. 큰 글자로도 표시
+119,E4,Story,가상 위치 기반 한 단계씩 길 안내,Highest,2.5h,2026-11-26,navigation,'알겠어'라고 하면 다음 단계. 중간 칭찬 포함
+120,E4,Story,"택시 부르기 (타는 곳 확인, 카카오 택시 연결, 기다리기 안내)",Highest,2.5h,2026-11-26,navigation,안 잡힐 때 '다른 길 / 계속 부르기' 분기 포함
+121,E4,Task,도착 칭찬 ('잘 오셨어요!'),Medium,0.5h,2026-11-26,navigation,
+122,E4,Story,카메라로 방향 보기 (큰 화살표 겹치기) (P1),Medium,2h,2026-11-26,navigation,시연은 미리 정한 장면과 고정 화살표. 멈춰서 비추게 안내
+123,E4,Task,"지도 보기 목업 (현재 위치, 목적지, 경로) (P1)",Low,1.5h,2026-11-26,navigation,시간 되면
+124,E5,Task,가족 설정 화면 뼈대,Medium,1h,2026-11-26,family,
+125,E5,Story,가족 문장 녹음 (MediaRecorder),Medium,1.5h,2026-11-26,family,녹음이 복제 목소리보다 먼저 재생
+126,E5,Task,"자주 가는 곳 등록 (이름, 주소)",Medium,1h,2026-11-26,family,장소 확인 때 먼저 물어봄
+127,E5,Story,"사진 올리기, 동의 확인, 아바타 변환",Medium,2.5h,2026-11-26,family,동의 먼저. 변환 후 원본 사진은 저장하지 않음
+128,E5,Task,입 위치 맞추기와 미리 듣기,Low,1.5h,2026-11-26,family,
+129,E6,Story,P0 기능 통합 (처음부터 끝까지 시연 흐름 완성),Highest,2h,2026-11-26,release,아바타 + 음성 + 길안내 + 택시
+130,E6,Task,"폰 실기 테스트 (https 배포, 마이크, 카메라 권한)",Highest,1.5h,2026-11-26,release,안드로이드 크롬 기준
+131,E6,Task,"실패 시나리오 점검 (음성 인식 실패, 링크 실패 대체안)",High,1h,2026-11-26,release,
+132,E6,Task,"발표 자료 작성 (미리 만든 목소리, 가상 위치, AI 도우미 표시 명시)",High,2h,2026-11-26,release,PRD의 '발표에서 반드시 명시할 것' 반영
+133,E6,Task,시연 리허설,High,1h,2026-11-26,release,
+134,E6,Task,develop -> main 최종 병합,High,0.5h,2026-11-26,release,팀장 담당
