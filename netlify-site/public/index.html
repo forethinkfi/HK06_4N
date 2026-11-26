@@ -120,9 +120,117 @@ dialog label{display:grid;gap:5px;font-weight:700}
 .flow-naver-map .flow-map-form{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:6px;margin:6px 0}
 .flow-naver-map p{padding:5px 0}
 .flow-map-viewport .route-map-layer{border-radius:8px;overflow:hidden}
-</style><style>.route-viewport canvas[hidden],.flow-route-canvas[hidden]{display:none}.flow-route-canvas{display:block;width:100%;height:auto}.route-viewport{min-height:260px}</style></head>
+</style><style>.route-viewport canvas[hidden],.flow-route-canvas[hidden]{display:none}.flow-route-canvas{display:block;width:100%;height:auto}.route-viewport{min-height:260px}</style>
+<style id="figma-redesign">
+/* Figma · N4 손주 챗봇 · 어르신 화면 디자인 토큰 */
+:root{
+ --color-surface:#fff;--color-surface-sub:#f5f5f5;--color-text:#111;--color-text-button:#222;--color-text-sub:#444;
+ --color-accent:#8298dc;--color-accent-soft:rgba(130,152,220,.3);--color-accent-glow:rgba(130,152,220,.5);
+ --color-listening:rgba(59,61,77,.8);--color-heard:#626471;--color-taxi-status:#ffe17a;--color-answer-positive:#3c21a8;--color-answer-negative:#e24048;--color-map-surface:#e8f0f7;--color-on-primary:#000;
+ --color-border-button:rgba(0,0,0,.5);--color-border:#666;--shadow-button:0 4px 4px rgba(0,0,0,.25);--shadow-card:0 3px 5px rgba(94,84,158,.3);
+ --font-base:'Noto Sans KR','Apple SD Gothic Neo','Malgun Gothic',sans-serif;
+}
+html,body{font-family:var(--font-base);background:#e4e6ee}
+.phone{border-color:transparent;border-radius:30px;background:var(--color-surface-sub);box-shadow:0 8px 30px rgba(59,61,77,.18)}
+.phone .topbar{background:var(--color-surface);border-bottom:0;padding:10px 16px 6px;align-items:center}
+.phone .topbar button{width:44px;height:44px;min-height:44px;padding:0;border:0;border-radius:12px;background:transparent;display:grid;place-items:center}
+.phone .topbar button img{display:block;width:44px;height:44px}
+.phone .topbar button:disabled{opacity:.35}
+
+.gy-screen{position:relative;width:390px;height:844px;box-sizing:border-box;padding:0;gap:0;display:flex;flex-direction:column;background:var(--color-surface-sub);color:var(--color-text);font-family:var(--font-base);overflow:hidden}
+.gy-screen [hidden]{display:none!important}
+.gy-screen button{font-family:var(--font-base);touch-action:manipulation;cursor:pointer}
+.gy-head{position:relative;z-index:2;flex:none;display:flex;flex-direction:column;align-items:center;padding:0 16px 10px;background:var(--color-surface);border-radius:0 0 30px 30px;box-shadow:0 0 10px var(--color-accent-glow);clip-path:inset(0 -24px -24px -24px)}
+.gy-head::before{content:'';width:352px;max-width:100%;height:2px;border-radius:99px;background:var(--color-accent-soft)}
+.gy-question{box-sizing:border-box;width:100%;min-height:109px;margin:0;padding:20px 0 8px;display:flex;align-items:center;justify-content:center;font-size:28px;font-weight:700;line-height:1.35;text-align:center;white-space:pre-line;word-break:keep-all;overflow-wrap:anywhere;color:var(--color-on-primary)}
+.gy-question.gy-long{font-size:24px}.gy-question.gy-xlong{font-size:20px}
+.gy-listen{margin:0;padding:8px 20px;border-radius:30px;background:var(--color-listening);color:#fff;font-size:16px;font-weight:700;line-height:normal;white-space:nowrap;cursor:pointer}
+.gy-body{position:relative;z-index:1;flex:1;min-height:0;display:flex;flex-direction:column;gap:9px;padding:12px 18px 18px;overflow-y:auto;scrollbar-width:none}
+.gy-body::-webkit-scrollbar{display:none}
+.gy-visual{position:relative;flex:1 1 auto;min-height:0;display:flex;align-items:center;justify-content:center}
+.gy-visual:has(.gy-car-card){flex:none;align-items:flex-start}
+.gy-avatar{width:100%;height:100%;min-height:120px;max-height:348px;background:url("img/avatar.png") center/contain no-repeat}
+.gy-avatar-home{max-height:416px}
+.gy-avatar-mini{position:absolute;top:8px;right:2px;width:78px;height:82px;min-height:0}
+
+.gy-choice{width:100%;min-height:76px;box-sizing:border-box;flex:none;margin:0;padding:14px 8px;border:2px solid var(--color-border-button);border-radius:32px;background:var(--color-surface);color:var(--color-text-button);box-shadow:var(--shadow-button);font-size:28px;font-weight:700;line-height:1.35;text-align:center;white-space:pre-line}
+.gy-compact .gy-choice{min-height:52px;padding:6px 8px;font-size:22px}
+.gy-answers{display:flex;flex-direction:column;gap:9px;flex:none}
+.gy-ox{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.gy-ox-btn{height:112px;display:flex;align-items:center;justify-content:center;padding:0;border:2px solid var(--color-border-button);border-radius:32px;background:var(--color-surface);filter:drop-shadow(0 4px 2px rgba(0,0,0,.25))}
+.gy-ox-btn img{display:block;width:72px;height:72px}
+.gy-sample{align-self:flex-start;margin:0;padding:7px 16px;border-radius:30px;background:var(--color-heard);color:#fff;font-size:20px;font-weight:700;line-height:1.3}
+.gy-demo{margin:0;color:#595959;font-size:16px;text-align:center}
+.gy-hint{margin:0;color:#333;font-size:18px;line-height:1.35;white-space:pre-line}
+.gy-more{align-self:center;min-height:40px;padding:4px 12px;border:0;background:none;color:#3b3d4d;font-size:17px;font-weight:700;text-decoration:underline;text-underline-offset:4px}
+.gy-fallback{display:flex;flex-direction:column;gap:9px;flex:none}
+.gy-input{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px}
+.gy-input input{box-sizing:border-box;width:100%;min-height:56px;padding:0 16px;border:2px solid var(--color-border);border-radius:18px;background:var(--color-surface);color:var(--color-text);font:400 20px var(--font-base)}
+.gy-input button{min-height:56px;padding:0 18px;border:2px solid var(--color-border-button);border-radius:32px;background:var(--color-surface);color:var(--color-text-button);box-shadow:var(--shadow-button);font-size:20px;font-weight:700}
+
+.gy-table{margin:0;padding:6px 14px;border:1px solid var(--color-accent);border-radius:20px;background:var(--color-surface);box-shadow:var(--shadow-card);flex:none}
+.gy-row{display:flex;align-items:center;gap:10px;padding:11px 0}
+.gy-row dt{flex:none;color:var(--color-text-sub);font-size:19px;line-height:1.35}
+.gy-row dd{flex:1;min-width:0;margin:0;text-align:right;font-size:22px;font-weight:700;line-height:1.35;color:var(--color-text)}
+.gy-row:nth-child(2) dd,.gy-row:nth-child(3) dd{font-size:26px}
+.gy-row-edit{width:100%;margin:0;padding:0;border:0;background:none;color:inherit;font:inherit;text-align:right}
+.gy-detail-stack{display:flex;flex-direction:column;gap:9px;flex:none}
+.gy-place{margin:0;min-height:92px;box-sizing:border-box;display:flex;align-items:center;justify-content:center;padding:8px;border:2px solid var(--color-border);border-radius:14px;background:var(--color-surface);font-size:18px;line-height:1.35;text-align:center;white-space:pre-line}
+.gy-status{margin:0;padding:8px;border-radius:18px;background:var(--color-taxi-status);color:var(--color-text);font-size:23px;font-weight:700;line-height:1.35;text-align:center}
+
+.gy-vehicle{display:flex;align-items:center;gap:12px;width:100%;flex:none;margin:0;padding:8px;border:1px solid var(--color-accent);border-radius:18px;background:var(--color-surface);box-shadow:var(--shadow-card);color:var(--color-text);text-align:left}
+.gy-vehicle-photo{flex:none;width:100px;height:62px;display:flex;align-items:center;justify-content:center;border-radius:10px;background:var(--color-map-surface);overflow:hidden}
+.gy-vehicle-info{display:grid;line-height:1.35;white-space:nowrap}
+.gy-vehicle-info b{font-size:27px}.gy-vehicle-info small{font-size:16px;font-weight:400}
+.gy-car-card{width:100%;box-sizing:border-box;display:flex;flex-direction:column;gap:9px;padding:14px;border-radius:28px;background:var(--color-surface);box-shadow:0 4px 10px rgba(18,0,115,.22)}
+.gy-car-photo{position:relative;height:170px;box-sizing:border-box;display:flex;align-items:center;justify-content:center;border:2px solid var(--color-border);border-radius:14px;background:#eee;overflow:hidden}
+.gy-car-model{margin:0;font-size:22px;line-height:1.35;text-align:center}
+.gy-car-plate{margin:0;font-size:44px;font-weight:700;line-height:1.35;text-align:center;white-space:nowrap}
+.gy-taxi{position:relative;flex:none;overflow:hidden}
+.gy-taxi-big{width:222.6px;height:154px}.gy-taxi-mini{width:82px;height:44px}
+.gy-taxi-layer,.gy-taxi-inner{position:absolute}
+.gy-taxi-layer>img,.gy-taxi-inner>img{position:absolute;inset:0;display:block;width:100%;height:100%;max-width:none}
+.gy-taxi-sign{position:absolute;inset:13.18% 45.58% 79.68% 45.44%;color:#2149a8;font-size:9.1px;font-weight:700;line-height:normal;text-align:center;white-space:nowrap}
+.gy-taxi-big .gy-taxi-plate{position:absolute;left:111.3px;top:116.9px;width:117.6px;transform:translate(-50%,-50%);color:#000;font-size:11.2px;font-weight:700;line-height:normal;text-align:center;white-space:nowrap}
+.gy-taxi-mini .gy-taxi-plate{position:absolute;inset:65.91% 34.76% 20.45% 34.76%;color:#17294d;font-size:5px;line-height:normal;text-align:center;white-space:nowrap}
+
+.gy-map-backdrop{position:absolute;inset:0;z-index:0;background:var(--color-map-surface)}
+.gy-map-backdrop .flow-naver-map{position:absolute;inset:0;padding:0;background:transparent}
+.gy-map-backdrop .flow-map-viewport{position:absolute;inset:0}
+.gy-map-backdrop .flow-map-viewport img,.gy-map-backdrop .flow-route-canvas{display:block;width:100%;height:100%;object-fit:cover;border-radius:0}
+.gy-map-backdrop .flow-map-viewport img[hidden],.gy-map-backdrop .flow-route-canvas[hidden]{display:none}
+.gy-on-map .gy-body{background:transparent}
+.gy-on-map .gy-more{background:var(--color-surface);border-radius:20px;box-shadow:var(--shadow-button)}
+.gy-on-map .gy-demo{align-self:center;padding:3px 12px;border-radius:14px;background:rgba(255,255,255,.92);color:#444}
+.gy-on-map .gy-visual{min-height:96px}
+.gy-map-tools{display:flex;flex-direction:column;align-items:center;gap:6px;flex:none}
+.gy-map-status{margin:0;max-width:100%;box-sizing:border-box;padding:5px 16px;border-radius:22px;background:var(--color-text-button);color:#fff;font-size:16px;font-weight:700;line-height:1.35;text-align:center}
+.gy-map-row{display:flex;gap:8px;justify-content:center}
+.gy-map-toggle{min-height:40px;padding:0 14px;border:2px solid var(--color-border-button);border-radius:32px;background:var(--color-surface);color:var(--color-text-button);box-shadow:var(--shadow-button);font-size:16px;font-weight:700}
+.gy-map-tools .flow-map-form{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:6px;width:100%;margin:0}
+.gy-map-tools .flow-map-form input{min-width:0;min-height:44px;box-sizing:border-box;padding:0 12px;border:2px solid var(--color-border);border-radius:14px;font:400 16px var(--font-base)}
+.gy-map-tools .flow-map-form button{min-height:44px;padding:0 14px;border:2px solid var(--color-border-button);border-radius:32px;background:var(--color-surface);font-size:16px;font-weight:700}
+
+/* 디자인이 없는 화면(길 안내·지도 검색·가족 설정·설정 창)에 같은 스타일 적용 */
+.form{background:var(--color-surface-sub);color:var(--color-text);font-family:var(--font-base)}
+.form h1{font-size:26px;font-weight:700;line-height:1.35;color:var(--color-on-primary)}
+.form p{font-size:17px}
+.form button,.app-flow.family-flow button{min-height:52px;border:2px solid var(--color-border-button);border-radius:32px;background:var(--color-surface);color:var(--color-text-button);box-shadow:var(--shadow-button);font:700 20px var(--font-base);padding:6px 16px}
+.form .strong{background:#3b3d4d;border-color:#3b3d4d;color:#fff}
+.form input:not([type=file]):not([type=checkbox]),.form select{min-height:48px;border:2px solid var(--color-border);border-radius:14px;background:var(--color-surface);font:400 18px var(--font-base)}
+.form label{font-size:18px;font-weight:700}
+.flow-badge{align-self:flex-start;border:0;border-radius:30px;padding:6px 16px;background:var(--color-listening);color:#fff;font-size:16px}
+.route-viewport{border:1px solid var(--color-accent);border-radius:20px;box-shadow:var(--shadow-card)}
+dialog{border:0;border-radius:28px;box-shadow:0 4px 10px rgba(18,0,115,.22);font-family:var(--font-base)}
+dialog button{min-height:52px;border:2px solid var(--color-border-button);border-radius:32px;background:var(--color-surface);color:var(--color-text-button);box-shadow:var(--shadow-button);font:700 18px var(--font-base)}
+#guidance-retry{border:2px solid var(--color-border-button);border-radius:32px;box-shadow:var(--shadow-button)}
+#speech-issue:not(:empty){background:var(--color-listening);border-radius:22px}
+</style>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700&display=swap">
+</head>
 <body>
-<div class="phone"><nav class="topbar" aria-label="화면 이동"><button type="button" id="previous">‹ 이전</button><button type="button" id="settings">⚙ 설정</button></nav>
+<div class="phone"><nav class="topbar" aria-label="화면 이동"><button type="button" id="previous" aria-label="이전" title="이전"><img src="img/chevron-left.svg" width="44" height="44" alt=""></button><button type="button" id="settings" aria-label="설정" title="설정"><img src="img/menu.svg" width="44" height="44" alt=""></button></nav>
 <div id="speech-issue" role="status"></div>
 <button type="button" id="guidance-retry" hidden>안내 음성 듣기</button>
 <main aria-label="곁에"></main></div>
@@ -409,7 +517,7 @@ function pick(place){destination=place;alternate=false;step=0;go('E2')}
 function micLabel(){return app.querySelector('[data-mic-status]')}
 function setMicStatus(active){
  const hint=micLabel();
- if(hint)hint.textContent=active?'● 듣고 있어요':'마이크 대기 중';
+ if(hint)hint.textContent=active?'AI 도우미가 듣고 있어요':'AI 도우미 · 마이크 대기 중';
 }
 async function startVoice(duringGuidance=false){
  if(!voiceEnabled||!micLabel()||recognition||preferences.open||document.hidden)return;
@@ -566,7 +674,7 @@ function render(next){
  id=next;
  const previous=document.querySelector('#previous');
  previous.disabled=id==='N-E1'&&!history.state?.gyeotaeDepth;
- previous.textContent=activeTaxiFlows.has(id)?'택시 취소':'‹ 이전';
+ previous.setAttribute('aria-label',activeTaxiFlows.has(id)?'택시 취소':'이전');previous.title=previous.getAttribute('aria-label');
  if(flow[id]){renderFlow();return}
  if(/^N-A[1-8]$/u.test(id)){renderFamilyFlow();return}
  app.replaceChildren(templates.get(id).content.cloneNode(true));
@@ -1289,112 +1397,204 @@ function flowMap(){
  viewport.append(image,routeCanvas);
  form.onsubmit=event=>{event.preventDefault();routeCanvas.hidden=true;loadNaverMap()};
  form.append(address,search);
- panel.append(viewport,status,form,directions);
+ form.hidden=true;
+ const searchToggle=flowElement('button','주소로 찾기','gy-map-toggle');searchToggle.type='button';
+ searchToggle.setAttribute('aria-expanded','false');
+ searchToggle.onclick=()=>{form.hidden=!form.hidden;searchToggle.setAttribute('aria-expanded',String(!form.hidden));if(!form.hidden)address.focus()};
+ status.className='gy-map-status';directions.className='gy-map-toggle';
+ const tools=flowElement('div','','gy-map-tools');
+ const toolRow=flowElement('div','','gy-map-row');
+ toolRow.append(directions,searchToggle);
+ tools.append(status,toolRow,form);
+ panel.append(viewport);
+ panel.tools=tools;
  queueMicrotask(()=>{if(panel.isConnected)loadNaverMap()});
  return panel;
 }
 
 
 let currentFlow;
-function renderHomeFlow(model){
- const screen=flowElement('div','','app-flow form flow-home');
- const visual=flowElement('div','','flow-visual');
- const avatar=flowElement('div','','flow-home-avatar');
+/* Figma 디자인(N4 손주 챗봇 · 어르신 화면) 적용: 화면 구성만 바꾸고 흐름·음성·지도 로직은 그대로 둔다. */
+const taxiArt={
+ big:[['a667c','10.91% 40.57% 77.27% 40.57%','-5.77% -2.5%'],['TAXI'],
+  ['85ea6','78.18% 66.35% 9.09% 21.07%'],['85ea6','78.18% 21.07% 9.09% 66.35%'],
+  ['3ffa2','21.36% 16.35% 14.55% 16.35%','-1.42% -0.93%'],['60f3a','26.36% 25.16% 51.36% 25.16%','-3.06% -1.25%'],
+  ['80e0c','55% 21.07% 45% 21.07%','-1.05px 0'],['caa9b','59.55% 63.84% 30% 19.18%','-6.52% -2.78%'],
+  ['caa9b','59.55% 19.18% 30% 63.84%','-6.52% -2.78%'],['9d6a9','63.18% 38.99% 36.82% 38.99%','-1.05px -2.14%'],
+  ['89bef','68.64% 23.58% 17.27% 23.58%','-4.84% -0.89%']],
+ mini:[['mini-7b41a','27.27% 14.63% 36.36% 14.63%','-6.25% -2.39% -6.25% -2.59%'],['mini-db179','54.55% 20.73% 20.45% 20.73%','-9.09% -2.08%'],
+  ['mini-d84e8','34.09% 26.83% 45.45% 24.39%','-8.33% -3.5%'],['mini-85992','68.18% 64.63% 9.09% 23.17%'],
+  ['mini-85992','68.18% 23.17% 9.09% 64.63%'],['mini-c468f','65.91% 35.37% 20.45% 35.37%']]
+};
+function taxiFigure(size){
+ const figure=flowElement('div','','gy-taxi gy-taxi-'+size);
+ figure.setAttribute('aria-hidden','true');
+ for(const [name,inset,inner] of taxiArt[size]){
+  if(name==='TAXI'){figure.append(flowElement('span','TAXI','gy-taxi-sign'));continue}
+  const layer=flowElement('div','','gy-taxi-layer');layer.style.inset=inset;
+  const art=flowElement('img');art.src='img/taxi-'+name+'.svg';art.alt='';
+  if(inner){const wrap=flowElement('div','','gy-taxi-inner');wrap.style.inset=inner;wrap.append(art);layer.append(wrap)}
+  else layer.append(art);
+  figure.append(layer);
+ }
+ figure.append(flowElement('span',vehiclePlate.replace(/^\S+\s/u,''),'gy-taxi-plate'));
+ return figure;
+}
+function flowAvatar(className='gy-avatar'){
+ const avatar=flowElement('div','',className);
  avatar.setAttribute('role','img');avatar.setAttribute('aria-label','가족 아바타');
- if(photo)image(avatar);
- else avatar.append(flowElement('div','','flow-face'),flowElement('div','가족 아바타','flow-body'));
- visual.append(avatar);
- const listening=flowElement('div','','flow-home-listen');
- const mic=flowElement('p','','flow-mic');
+ image(avatar);return avatar;
+}
+function flowHeader(text){
+ const header=flowElement('header','','gy-head');
+ const question=flowElement('h1',text,'gy-question');
+ question.classList.toggle('gy-long',text.length>30);
+ question.classList.toggle('gy-xlong',text.length>58);
+ question.dataset.dialogueResponse='';question.setAttribute('aria-live','polite');
+ const mic=flowElement('p','','gy-listen');
  mic.dataset.micStatus='';mic.setAttribute('role','status');
- listening.append(mic,flowElement('p',model.sample,'flow-note'));
- const talk=flowElement('button','눌러서 말하기','flow-talk');
+ header.append(question,mic);return header;
+}
+const flowTitles={'N-E7':'이대로 부를까요?','N-E9':'차 사진과 번호, 확인해 주세요'};
+function flowDetail(model){
+ const detail=model.detail;
+ if(model.map){
+  const stack=flowElement('div','','gy-detail-stack');
+  for(let i=0;i<detail.length;i+=2){
+   const label=detail[i],value=detail[i+1];
+   stack.append(label.includes('타는 곳')?flowElement('p',label+'\n'+value,'gy-place'):flowElement('p',label+' · '+value,'gy-status'));
+  }
+  return stack;
+ }
+ const table=flowElement('dl','','gy-table');
+ for(let i=0;i<detail.length;i+=2){
+  const label=detail[i],value=detail[i+1];
+  const row=flowElement('div','','gy-row');
+  const cell=flowElement('dd',value);
+  if(id==='N-E7'&&['출발','도착','결제'].includes(label)){
+   const edit=flowElement('button',value,'gy-row-edit');
+   edit.type='button';edit.setAttribute('aria-label',value+' 수정');edit.onclick=()=>editTripField(label);cell.replaceChildren(edit);
+  }
+  row.append(flowElement('dt',label),cell);table.append(row);
+ }
+ return table;
+}
+function flowChoiceButton(choice){
+ const button=flowElement('button','','gy-choice');
+ button.type='button';button.onclick=choice.run;
+ if(choice.voice==='차량 보여줘'){
+  button.className='gy-vehicle';button.setAttribute('aria-label',choice.label);
+  const picture=flowElement('span','','gy-vehicle-photo');picture.append(taxiFigure('mini'));
+  const info=flowElement('span','','gy-vehicle-info');
+  info.append(flowElement('b',vehiclePlate),flowElement('small','누르면 크게 보기'));
+  button.append(picture,info);
+  return button;
+ }
+ button.textContent=choice.label.replace(' · ','\n');
+ return button;
+}
+function renderHomeFlow(model){
+ const screen=flowElement('div','','app-flow gy-screen gy-home');
+ const body=flowElement('div','','gy-body');
+ const visual=flowElement('div','','gy-visual');
+ visual.append(flowAvatar('gy-avatar gy-avatar-home'));
+ const talk=flowElement('button','눌러서 말하기','gy-choice gy-talk');
  talk.type='button';
  talk.onclick=()=>{
   unlockGuidanceAudio();
   go('N-E1-choices');
  };
- const question=flowElement('h1','할아버지, 오늘 어디 가세요?','flow-question');
- question.dataset.dialogueResponse='';question.setAttribute('aria-live','polite');
- screen.append(flowElement('strong','AI 도우미','flow-badge'),visual,question,listening,talk);
+ body.append(visual,flowElement('p',model.sample.replace(/[“”"]/gu,''),'gy-sample'),talk);
+ screen.append(flowHeader('할아버지,\n오늘 어디 가세요?'),body);
  app.replaceChildren(screen);setMicStatus(false);
 }
 function renderFlow(){
  const model=flow[id]();
  currentFlow=model;
  if(id==='N-E1'){renderHomeFlow(model);return}
- const screen=flowElement('div','','app-flow form');
- const header=flowElement('div','','flow-header');
- header.append(flowElement('strong','AI 도우미','flow-badge'));
- if(model.demo)header.append(flowElement('span','택시 시연'));
- screen.append(header);
- const visual=flowElement('div','','flow-visual');
- if(model.map)visual.append(flowMap());
- else if(model.car){
-  const car=flowElement('div','','taxi-car taxi-reference');
-  car.setAttribute('aria-hidden','true');
-  visual.append(flowElement('strong','흰색 중형 승용차'),car,flowElement('b',vehiclePlate,'flow-plate'));
- }else{
-  const avatar=flowElement('div','','taxi-avatar taxi-reference');
-  avatar.setAttribute('role','img');avatar.setAttribute('aria-label','가족 아바타');
-  image(avatar);visual.append(avatar);
- }
- const question=flowElement('h1',model.line,'flow-question');
- question.dataset.dialogueResponse='';question.setAttribute('aria-live','polite');
- screen.append(visual);
- if(model.detail){
-  const details=flowElement('dl','','flow-detail');
-  for(let i=0;i<model.detail.length;i+=2){
-   const label=model.detail[i];
-   const value=flowElement('dd',model.detail[i+1]);
-   if(id==='N-E7'&&['출발','도착','결제'].includes(label)){
-    const edit=flowElement('button',model.detail[i+1]+' 수정');
-    edit.type='button';edit.onclick=()=>editTripField(label);value.replaceChildren(edit);
-   }
-   details.append(flowElement('dt',label),value);
-  }
-  screen.append(details);
- }
- if(model.demo)screen.append(flowElement('p','시연 화면이에요. 실제 택시는 호출되지 않아요.','flow-note'));
- const mic=flowElement('p','','flow-mic');
- mic.dataset.micStatus='';mic.setAttribute('role','status');
- screen.append(question,mic);
- if(model.sample)screen.append(flowElement('p',model.sample,'flow-note'));
- const answers=flowElement('div','','flow-answers');
  const choices=model.choices||[];
- answers.classList.toggle('flow-pair',choices[0]?.label==='⭕');
- for(const choice of choices){
-  const button=flowElement('button',choice.label);
-  button.type='button';button.onclick=choice.run;
-  if(choice.label==='⭕'||choice.label==='❌')button.setAttribute('aria-label',choice.voice==='응'?'예':'아니요');
-  answers.append(button);
+ const pair=choices[0]?.label==='⭕';
+ const extras=pair?choices.slice(2):choices;
+ const list=!pair&&!model.map&&!model.car&&extras.length>=3;
+ const screen=flowElement('div','','app-flow gy-screen');
+ screen.classList.toggle('gy-on-map',!!model.map);
+ screen.classList.toggle('gy-list',list);
+ const body=flowElement('div','','gy-body');
+ const visual=flowElement('div','','gy-visual');
+ if(model.map){
+  const panel=flowMap();
+  const backdrop=flowElement('div','','gy-map-backdrop');
+  backdrop.append(panel);screen.append(backdrop);
+  body.append(panel.tools);
+  visual.append(flowAvatar('gy-avatar gy-avatar-mini'));
+ }else if(model.car){
+  const card=flowElement('section','','gy-car-card');
+  card.setAttribute('aria-label','예시 차량 정보');
+  const picture=flowElement('div','','gy-car-photo');picture.append(taxiFigure('big'));
+  card.append(picture,flowElement('p','흰색 중형 승용차 (예시)','gy-car-model'),flowElement('p',vehiclePlate,'gy-car-plate'));
+  visual.append(card);
+ }else if(!list&&!model.detail)visual.append(flowAvatar());
+ body.append(visual);
+ if(model.demo)body.append(flowElement('p','시연 화면이에요. 실제 택시는 호출되지 않아요.','gy-demo'));
+ if(model.detail)body.append(flowDetail(model));
+ if(id==='N-E7')body.append(flowElement('p','표의 항목을 누르면 그 단계로 돌아가요.\n요금은 예시이며 실제와 다를 수 있어요.','gy-hint'));
+ if(model.sample)body.append(flowElement('p',model.sample.replace(/[“”"]/gu,''),'gy-sample'));
+ const answers=flowElement('div','','gy-answers');
+ answers.classList.toggle('gy-compact',!!model.map||(pair&&extras.length>0));
+ const vehicles=extras.filter(choice=>choice.voice==='차량 보여줘');
+ for(const choice of vehicles)answers.append(flowChoiceButton(choice));
+ if(pair){
+  const ox=flowElement('div','','gy-ox');
+  for(const choice of choices.slice(0,2)){
+   const button=flowElement('button','','gy-ox-btn');
+   button.type='button';button.onclick=choice.run;
+   button.setAttribute('aria-label',choice.voice==='응'?'예':'아니요');
+   const icon=flowElement('img');icon.src=choice.label==='⭕'?'img/answer-o.svg':'img/answer-x.svg';icon.alt='';icon.width=icon.height=72;
+   button.append(icon);ox.append(button);
+  }
+  answers.append(ox);
  }
- const fallback=flowElement('section','','flow-fallback');
- fallback.hidden=id!=='N-E1-choices';
- fallback.setAttribute('aria-label','응답 선택지');
- if(choices.length)fallback.append(answers);
- const repeat=flowElement('button','다시 알려줘');
- repeat.type='button';repeat.onclick=speakQuestion;fallback.append(repeat);
+ for(const choice of extras)if(!vehicles.includes(choice))answers.append(flowChoiceButton(choice));
+ if(answers.children.length)body.append(answers);
+ const fallback=flowElement('section','','gy-fallback');
+ fallback.setAttribute('aria-label','다른 방법으로 답하기');
+ const repeat=flowElement('button','다시 알려줘','gy-choice');
+ repeat.type='button';repeat.onclick=speakQuestion;
+ let form;
  if(model.input||choices.length){
-  const form=flowElement('form','','flow-input');
+  form=flowElement('form','','gy-input');
   const input=flowElement('input');
   input.placeholder=model.input||'다른 답을 입력해 주세요';
   input.setAttribute('aria-label',input.placeholder);
   const submit=flowElement('button',model.input?'확인':'다른거');
   submit.type='submit';
   form.onsubmit=event=>{event.preventDefault();const text=input.value.trim();if(text)flowHeard(text);else input.focus()};
-  form.append(input,submit);fallback.append(form);
+  form.append(input,submit);
  }
- const talk=flowElement('button','눌러서 말하기','flow-talk');
- talk.type='button';talk.hidden=!fallback.hidden;
- talk.onclick=()=>{
-  fallback.hidden=false;talk.hidden=true;
-  fallback.querySelector('button,input')?.focus({preventScroll:true});
-  fallback.scrollIntoView({block:'nearest'});
-  unlockGuidanceAudio();
-  speakQuestion();
- };
- screen.append(talk,fallback);
+ if(model.input){
+  fallback.append(form);
+  const talk=flowElement('button','눌러서 말하기','gy-choice gy-talk');
+  talk.type='button';
+  talk.onclick=()=>{unlockGuidanceAudio();speakQuestion()};
+  body.append(fallback,talk);
+ }else{
+  fallback.append(repeat);if(form)fallback.append(form);
+  fallback.hidden=id!=='N-E1-choices';
+  if(fallback.hidden){
+   const more=flowElement('button','다시 듣기 · 글자로 답하기','gy-more');
+   more.type='button';more.setAttribute('aria-expanded','false');
+   more.onclick=()=>{
+    fallback.hidden=false;more.hidden=true;
+    fallback.querySelector('button,input')?.focus({preventScroll:true});
+    fallback.scrollIntoView({block:'nearest'});
+    unlockGuidanceAudio();
+    speakQuestion();
+   };
+   body.append(more);
+  }
+  body.append(fallback);
+ }
+ screen.append(flowHeader(flowTitles[id]||model.line),body);
  app.replaceChildren(screen);setMicStatus(false);
  if(model.progress)deferFlow(...model.progress);
 }
