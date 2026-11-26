@@ -199,6 +199,15 @@ html,body{font-family:var(--font-base);background:#e4e6ee}
 .gy-map-backdrop .flow-map-viewport{position:absolute;inset:0}
 .gy-map-backdrop .flow-map-viewport img,.gy-map-backdrop .flow-route-canvas{display:block;width:100%;height:100%;object-fit:cover;border-radius:0}
 .gy-map-backdrop .flow-map-viewport img[hidden],.gy-map-backdrop .flow-route-canvas[hidden]{display:none}
+/* 드래그되는 네이버 지도: 인증되면 정적 지도 이미지 위에 표시 */
+.drag-map-layer{position:absolute;inset:0;z-index:1;visibility:hidden;touch-action:none}
+.drag-map-layer.ready{visibility:visible}
+.drag-map-host{position:relative;width:100%;aspect-ratio:348/416;border-radius:12px;overflow:hidden}
+.drag-map-host:not(.ready){position:absolute;left:-9999px;width:348px}
+.drag-map-host[hidden]{display:none}
+/* 지도 화면에서는 빈 영역의 손가락 움직임이 뒤의 지도로 가도록 함 */
+.gy-on-map .gy-body,.gy-on-map .gy-visual,.gy-on-map .gy-map-tools,.gy-on-map .gy-map-row{pointer-events:none}
+.gy-on-map .gy-body>:not(.gy-visual):not(.gy-map-tools),.gy-on-map .gy-visual>*,.gy-on-map .gy-map-tools>:not(.gy-map-row),.gy-on-map .gy-map-row>*{pointer-events:auto}
 .gy-on-map .gy-body{background:transparent;padding-left:14px;padding-right:14px}
 .gy-on-map .gy-more{background:var(--color-surface);border-radius:20px;box-shadow:var(--shadow-button)}
 .gy-on-map .gy-demo{align-self:center;padding:3px 12px;border-radius:14px;background:rgba(255,255,255,.92);color:#444}
@@ -994,6 +1003,12 @@ function setupMap(){
    mapURL=candidateURL;image.src=mapURL;image.hidden=false;
    zoom.hidden=false;zoomIn.disabled=level>=20;zoomOut.disabled=level<=6;
    center=location;status.textContent='';
+   let host=app.querySelector('#naver-drag-map');
+   if(!host){host=document.createElement('div');host.id='naver-drag-map';host.className='drag-map-host';image.after(host)}
+   host.hidden=false;
+   const dragMap=await mountDragMap(host,image,location,{signal,zoom:level,zoomControl:true});
+   if(signal.aborted)return;
+   if(dragMap)zoom.hidden=true;else host.hidden=true;
   }catch(error){
    if(!signal.aborted||signal.reason==='timeout')status.textContent=signal.reason==='timeout'?'지도를 불러오는 데 시간이 오래 걸려요. 다시 눌러 주세요.':error.message;
   }finally{clearTimeout(deadline)}
@@ -1334,6 +1349,55 @@ const flowElement=(tag,value='',className='')=>{
  element.textContent=value;element.className=className;return element;
 };
 
+let dragMapView=null;
+async function mountDragMap(host,image,center,options={}){
+ const {signal}=options;
+ try{
+  const clientId=(await configuredMaps()).mapsClientId;
+  if(!clientId||signal?.aborted||!host.isConnected)return null;
+  const maps=await loadNaverMap(clientId);
+  if(signal?.aborted||!host.isConnected||mapAuthFailed)return null;
+  host.querySelector('.drag-map-layer')?.remove();
+  if(dragMapView){try{dragMapView.destroy()}catch{}dragMapView=null}
+  const layer=document.createElement('div');layer.className='drag-map-layer';
+  layer.setAttribute('aria-label','손가락으로 움직일 수 있는 네이버 지도');
+  host.append(layer);
+  const [lon,lat]=String(center).split(',').map(Number);
+  if(!Number.isFinite(lon)||!Number.isFinite(lat)){layer.remove();return null}
+  const position=new maps.LatLng(lat,lon);
+  const map=new maps.Map(layer,{center:position,zoom:options.zoom||16,draggable:true,pinchZoom:true,scrollWheel:true,
+   zoomControl:!!options.zoomControl,zoomControlOptions:{position:maps.Position.RIGHT_CENTER},mapDataControl:false,scaleControl:false});
+  dragMapView=map;
+  new maps.Marker({map,position});
+  const ready=await new Promise(resolve=>{
+   const timer=setTimeout(()=>done(false),7000);
+   const listener=maps.Event.addListener(map,'tilesloaded',()=>setTimeout(()=>done(!mapAuthFailed),400));
+   function done(value){clearTimeout(timer);maps.Event.removeListener(listener);resolve(value)}
+  });
+  if(!ready||signal?.aborted||!layer.isConnected||dragMapView!==map){
+   if(dragMapView===map){try{map.destroy()}catch{}dragMapView=null}
+   layer.remove();return null;
+  }
+  const previousFailure=window.navermap_authFailure;
+  window.navermap_authFailure=()=>{
+   try{previousFailure?.()}catch{}
+   layer.classList.remove('ready');host.classList.remove('ready');if(image)image.hidden=false;
+  };
+  layer.classList.add('ready');host.classList.add('ready');
+  if(image)image.hidden=true;
+  return map;
+ }catch{return null}
+}
+function addRouteLine(map,path){
+ const maps=window.naver?.maps;
+ if(!maps||!map)return false;
+ try{
+  const line=new maps.Polyline({map,path:path.map(([lon,lat])=>new maps.LatLng(lat,lon)),strokeColor:'#1556c0',strokeWeight:6,strokeOpacity:0.9});
+  new maps.Marker({map,position:new maps.LatLng(path.at(-1)[1],path.at(-1)[0]),title:'목적지'});
+  map.fitBounds(line.getBounds(),{top:40,right:40,bottom:40,left:40,maxZoom:18});
+  return true;
+ }catch{return false}
+}
 function flowMap(){
  const panel=flowElement('div','','flow-map flow-naver-map');
  const image=flowElement('img');
@@ -1372,13 +1436,15 @@ function flowMap(){
    if(mapURL)URL.revokeObjectURL(mapURL);
    mapURL=url;image.src=mapURL;image.hidden=false;
    status.textContent=value?'네이버 지도 · 검색한 위치':'네이버 지도 · 현재 위치';
+   const dragMap=await mountDragMap(viewport,image,center,{signal});
+   if(signal.aborted||!panel.isConnected)return;
    if(screen==='N-E13'&&goalAddress){
     try{
      const target=await pointFor(goalAddress,signal);
      const route=await driving(center,target,signal);
      if(!validRoute(route.path)||signal.aborted||!panel.isConnected)return;
      if(routeMap){routeMap.destroy();routeMap=null}
-     if(await drawStaticRoute(routeCanvas,route.path,signal)){
+     if(dragMap?addRouteLine(dragMap,route.path):await drawStaticRoute(routeCanvas,route.path,signal)){
       image.hidden=true;
       status.textContent='네이버 지도 · 병원까지 자동차 경로';
      }
