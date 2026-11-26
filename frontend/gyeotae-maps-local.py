@@ -12,6 +12,8 @@ from urllib.request import Request, urlopen
 
 ROOT = Path(__file__).resolve().parent
 APP = ROOT / "gyeotae-s25-ultra.html"
+IMAGES = ROOT / "img"
+IMAGE_TYPES = {".png": "image/png", ".svg": "image/svg+xml"}
 HOSTS = {"localhost:8765", "127.0.0.1:8765"}
 WALK_URL = "https://api.heigit.org/openrouteservice/v2/directions/foot-walking/geojson"
 ROUTES = {
@@ -200,6 +202,13 @@ class Handler(BaseHTTPRequestHandler):
             if not APP.is_file():
                 return self.problem(404, "서버 파일과 HTML을 같은 폴더에 넣어 주세요.")
             return self.send_body(200, APP.read_bytes(), "text/html; charset=utf-8")
+        if request.path.startswith("/img/"):
+            name = request.path[len("/img/"):]
+            asset = IMAGES / name
+            kind = IMAGE_TYPES.get(asset.suffix.lower())
+            if not kind or "/" in name or "\\" in name or name.startswith(".") or not asset.is_file():
+                return self.problem(404, "이미지를 찾지 못했어요. img 폴더를 서버 파일 옆에 두세요.")
+            return self.send_body(200, asset.read_bytes(), kind)
         if request.path == "/api/config":
             configured_id = os.environ.get("GYEOTAE_MAPS_KEY_ID", "")
             config = {"mapsClientId": configured_id, "mapsConfigured": bool(configured_id and os.environ.get("GYEOTAE_MAPS_KEY"))}
